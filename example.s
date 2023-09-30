@@ -5,8 +5,8 @@
 main:
     LDR R0, =0x40021018     @       Adress of RCC_APB2ENR = 0x40021018, simbol = idicates that the command is pseudo
     LDR R1, [R0]            @       R1 = RCC_APB2ENR
-    MOV R2, #0x10
-    ORR R1, R1, R2          @       R1 |= 0x10
+    MOV R2, #0x14           @       IOPA = 0x4   +   IOPC = 0x10    Result = 0x14
+    ORR R1, R1, R2          @       R1 |= 0x14
     STR R1, [R0]            @       RCC_APB2ENR = R1
 
     LDR R0, =0x40011004     @       Adress of GPIOC_CRH = = 0x40011004, simbol = idicates that the command is pseudo
@@ -17,9 +17,10 @@ main:
     LDR R1, =0x42220224     @       Adress of 9th bit GPIOC_BSRR = 0x42220264 BIT SET, simbol = idicates that the command is pseudo
     MOV R2, #0x1            
     STR R2, [R1]            @       Initial set state
+    LDR R4, =0x42210100     @       Bit-banding adress of the PA0 button (0 bit of GPIOA_IDR)
 
 toggle:
-
+    LDR R2, [R4]            @       Reading of the button state
     STR R2, [R0]            @       Toggle reset state
     EOR R2, R2, #0x1        @       Change led state
     STR R2, [R1]            @       Toggle set state
